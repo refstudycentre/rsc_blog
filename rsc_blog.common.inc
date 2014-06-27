@@ -26,7 +26,7 @@ function rsc_blog_field_config($form_values = NULL) {
   $fieldnames = array_keys(field_info_fields());
   $prefix = 'rscb'; // RSC Blog
 
-  // body text
+  /* body text */
   $fieldname = "{$prefix}_body";
   if (!in_array($fieldname,$fieldnames)) {
     field_create_field(array(
@@ -42,7 +42,7 @@ function rsc_blog_field_config($form_values = NULL) {
     $settings = variable_get("rsc_blog",NULL);  // use old settings if any
   }
   
-  // tag reference field
+  /* Tags term reference */
   if (!empty($settings) && !empty($settings['vocabs']['tag']) && $settings['vocabs']['tag'] > 0) {
     $tag_vocab = taxonomy_vocabulary_load($settings['vocabs']['tag']);
   }
@@ -73,6 +73,16 @@ function rsc_blog_field_config($form_values = NULL) {
     drupal_set_message(t('Could not create fields for rsc_blog, because vocabulary settings have not been configured yet.'), 'error');
   }
   
+  /* Blog title field */
+  $fieldname = "{$prefix}_blogtitle";
+  if (!in_array($fieldname,$fieldnames)) {
+    field_create_field(array(
+      'field_name'  => $fieldname,
+      'type'        => 'text',
+      'cardinality' => 1,
+    ));
+  }
+  
 }
 
 
@@ -83,7 +93,8 @@ function rsc_blog_field_instance_config($form_values = NULL) {
   $t = get_t(); // this function might run during install, or any other time
   $prefix = "rscb";
   $fields = array_keys(field_info_fields());
-  $instances = array_keys(field_info_instances('node','rsc_blog'));
+  $instances_blog = array_keys(field_info_instances('node','rsc_blog'));
+  $instances_user = array_keys(field_info_instances('user','user'));
   
   if (!empty($form_values['rsc_blog'])) {
     $settings = $form_values['rsc_blog'];        // use new settings
@@ -95,13 +106,13 @@ function rsc_blog_field_instance_config($form_values = NULL) {
     $tag_vocab = taxonomy_vocabulary_load($settings['vocabs']['tag']);
   }
   
-  // Tags term reference
+  /* Tags term reference */
   if (!empty($tag_vocab)) {                                 // if tag vocabulary has been configured
     $fieldname = "{$prefix}_tag_{$tag_vocab->machine_name}"; // determine what this field is called
     if (in_array($fieldname, $fields)) {                     // if the field exists
   
       // rsc_blog:
-      if (!in_array($fieldname, $instances)) { // if the instance does not exist yet
+      if (!in_array($fieldname, $instances_blog)) { // if the instance does not exist yet
         field_create_instance(array(               // create the instance
           'field_name'  => $fieldname,
           'entity_type' => 'node',
@@ -115,7 +126,7 @@ function rsc_blog_field_instance_config($form_values = NULL) {
           ),
           'widget'      => array('type' => 'options_select'),
         ));
-        $instances[] = $fieldname;
+        $instances_blog[] = $fieldname;
       }
   
     } else {
@@ -127,7 +138,7 @@ function rsc_blog_field_instance_config($form_values = NULL) {
   $fieldname = "{$prefix}_body";
   
   // rsc_blog:
-  if (!in_array($fieldname, $instances) && in_array($fieldname, $fields)) {
+  if (!in_array($fieldname, $instances_blog) && in_array($fieldname, $fields)) {
     field_create_instance(array(
       'field_name'  => $fieldname,
       'entity_type' => 'node',
@@ -141,6 +152,20 @@ function rsc_blog_field_instance_config($form_values = NULL) {
           'weight' => 1,
         ),
       ),
+    ));
+    $instances_blog[] = $fieldname;
+  }
+  
+  /* Blog title field */
+  
+  // user:
+  if (!in_array($fieldname, $instances) && in_array($fieldname, $fields)) {
+    field_create_instance(array(
+      'field_name'  => $fieldname,
+      'entity_type' => 'user',
+      'bundle'      => 'user',
+      'label'       => $t('Blog title'),
+      'required'    => false,
     ));
     $instances[] = $fieldname;
   }
