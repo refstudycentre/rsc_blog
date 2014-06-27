@@ -1,0 +1,62 @@
+<?php
+
+include "rsc_blog.blocks.inc";
+
+
+/**
+ * Implements hook_permission().
+ */
+function rsc_blog_permission() {
+  return array(
+    'administer rsc_blog' => array(
+      'title' => t('Administer RSC Blog'),
+    ),
+  );
+}
+
+
+/**
+ * Implements hook_menu().
+ */
+function rsc_blog_menu() {
+  $items = array();
+
+  $items['admin/structure/rsc_blog'] = array(
+    'title' => t('RSC Blog'),
+    'description' => t('Configure RSC Blog.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('rsc_blog_settings'),
+    'file' => 'rsc_blog.admin.inc',
+    'access arguments' => array('administer rsc_blog'),
+  );
+
+  return $items;
+}
+
+
+/**
+ * Implements hook_node_info().
+ * 
+ * Defines the content types used by rsc_blog
+ */
+function rsc_blog_node_info() {
+  return array(
+    'rsc_blog' => array(
+      'name'        => t('RSC Blog: Blog entry'),
+      'base'        => 'rsc_blog',
+      'description' => t("A single blog post."),
+      'locked'      => TRUE,  // admin cannot change machine name
+    ),
+  );
+}
+
+
+/**
+ * Implements hook_form().
+ * 
+ * These forms allow the content types to be edited
+ */
+function rsc_blog_form($node, &$form_state) {
+  return node_content_form($node, $form_state);
+}
+

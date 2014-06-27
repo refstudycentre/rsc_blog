@@ -1,0 +1,8 @@
+name = RSC Blog
+description = Defines content type, menu, views and user role for blogging
+core = 7.x
+package = "RSC"
+
+dependencies[] = taxonomy
+
+configure = admin/structure/rsc_blog

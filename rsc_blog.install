@@ -1,0 +1,22 @@
+<?php
+
+
+/**
+ * Implements hook_install().
+ */
+function rsc_blog_install() {
+  
+  module_load_include('inc','rsc_blog','rsc_blog.common');
+  
+  /* Settings for content types */
+  rsc_blog_content_type_settings();
+  
+}
+
+
+/**
+ * Implements hook_uninstall().
+ */
+function rsc_blog_uninstall() {
+  // TODO: remove variables
+}
