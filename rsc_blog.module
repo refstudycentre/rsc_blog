@@ -60,3 +60,37 @@ function rsc_blog_form($node, &$form_state) {
   return node_content_form($node, $form_state);
 }
 
+
+/**
+ * Implements hook_preprocess_HOOK(&$variables)
+ * https://api.drupal.org/api/drupal/modules!system!theme.api.php/function/hook_preprocess_HOOK/7
+ */
+function rsc_blog_preprocess_node(&$vars) {
+
+  if ($vars['type'] == 'blog_entry') { // For blog entries:
+
+    $user = user_load($vars['node']->uid);
+
+    $fullname = field_get_items('user',$user,'field_fullname'); // This field is defined by the rsc_user module
+    if (empty($fullname) || empty($fullname[0]['safe_value'])) {
+      $fullname = $user->name;
+    } else {
+      $fullname = $fullname[0]['safe_value'];
+    }
+
+    $blogtitle = field_get_items('user',$user,'field_blog_title'); // TODO: define this field!
+    if (empty($blogtitle) || empty($blogtitle[0]['safe_value'])) {
+      $blogtitle = t("@name's blog",array('@name'=>$fullname));
+    } else {
+      $blogtitle = $blogtitle[0]['value'];
+    }
+    $vars['submitted'] = t("Posted by @fullname in !blogtitle on !pubdate.",array(
+      '@fullname'  => $fullname,
+      '!blogtitle' => l($blogtitle,"blog/$user->name"),
+      '!pubdate'   => $vars['pubdate'],
+    ));
+
+  }
+
+}
+

@@ -4,5 +4,6 @@ core = 7.x
 package = "RSC"
 
 dependencies[] = taxonomy
+dependencies[] = rsc_user
 
 configure = admin/structure/rsc_blog
