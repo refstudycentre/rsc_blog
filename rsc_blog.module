@@ -71,19 +71,27 @@ function rsc_blog_preprocess_node(&$vars) {
 
     $user = user_load($vars['node']->uid);
 
-    $fullname = field_get_items('user',$user,'field_fullname'); // This field is defined by the rsc_user module
+    // Load the full name and surname field (defined by rsc_user module)
+    $fullname = field_get_items('user',$user,'rscu_fullname');
+
+    // If the field contains a value, use it, otherwise use the short username.
     if (empty($fullname) || empty($fullname[0]['safe_value'])) {
       $fullname = $user->name;
     } else {
       $fullname = $fullname[0]['safe_value'];
     }
 
+    // Get the title of this user's blog, if any
     $blogtitle = field_get_items('user',$user,'field_blog_title'); // TODO: define this field!
+
+    // Use the blog title, otherwise call is "user's blog"
     if (empty($blogtitle) || empty($blogtitle[0]['safe_value'])) {
       $blogtitle = t("@name's blog",array('@name'=>$fullname));
     } else {
       $blogtitle = $blogtitle[0]['value'];
     }
+
+    // Finally, change the text showing the author and publication time to include the blog title.
     $vars['submitted'] = t("Posted by @fullname in !blogtitle on !pubdate.",array(
       '@fullname'  => $fullname,
       '!blogtitle' => l($blogtitle,"blog/$user->name"),
