@@ -7,9 +7,42 @@
 function rsc_blog_install() {
   
   module_load_include('inc','rsc_blog','rsc_blog.common');
-  
-  /* Settings for content types */
+
+  /*
+   * Settings for content types
+   */
   rsc_blog_content_type_settings();
+
+  /*
+   * Set up the role and permissions for bloggers
+   */
+
+  $rolename = 'rsc blogger';
+
+  // Try to load the role to see if it exists
+  $role = user_role_load_by_name($rolename);
+  if (!$role) {
+    // create it, since it does not exist
+    $role = new stdClass();
+    $role->name = $rolename;
+    user_role_save($role);
+    // load the newly created role, to get the rid
+    $role = user_role_load_by_name($rolename);
+  }
+
+  // Assign the necessary permissions to bloggers
+  user_role_change_permissions($role->rid, array(
+    'access content overview' => true,
+    'access content' => true,
+    'view own unpublished content' => true,
+    'view revisions' => true,
+    'revert revisions' => true,
+    'delete revisions' => true,
+    'create rsc_blog content' => true,
+    'edit own rsc_blog content' => true,
+    'delete own rsc_blog content' => true,
+    'view the administration theme' => true,
+  ));
   
 }
 

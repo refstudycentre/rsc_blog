@@ -42,7 +42,7 @@ function rsc_blog_settings() {
     '#required'      => FALSE,
     '#multiple'      => FALSE,
     '#title'         => t('tags'),
-    '#description'   => t('A reference field to terms in this vocabulary will be created on the blog content type.'),
+    '#description'   => t('A reference field to terms in this vocabulary will be created on the blog content type. Remember to give the "RSC Blogger" role permission to add, edit and/or delete terms in this vocabulary.'),
     '#default_value' => $settings['vocabs']['tag'],
     '#options'       => $vocab_options,
   );
