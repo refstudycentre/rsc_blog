@@ -14,6 +14,9 @@ function rsc_blog_content_type_settings() {
   variable_set("node_submitted_{$type}", 1);                // 'Display author and date information'.
   variable_set("comment_{$type}", COMMENT_NODE_OPEN);       // open comments
   variable_set("menu_options_{$type}", array());           // no available menus
+
+  // pathauto settings
+  variable_set("pathauto_node_rsc_blog_pattern", 'blog/[node:author]/[node:title]');
   
 }
 
