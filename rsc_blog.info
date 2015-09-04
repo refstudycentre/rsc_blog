@@ -5,5 +5,6 @@ package = "RSC"
 
 dependencies[] = taxonomy
 dependencies[] = rsc_user
+dependencies[] = pathauto
 
 configure = admin/structure/rsc_blog
