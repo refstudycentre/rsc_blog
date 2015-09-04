@@ -25,13 +25,6 @@ function rsc_blog_settings() {
   /* build the form */
   $form['#tree'] = TRUE; // save the whole thing as an array
 
-  $form['rsc_blog']['links'] = array(
-    '#type'   => 'markup',
-    '#markup' => drupal_render($link_list),
-    '#prefix' => '<div class="form-item">',
-    '#suffix' => '</div>',
-  );
-
   $form['rsc_blog']['vocabs'] = array(
     '#type'  => 'fieldset',
     '#title' => 'Taxonomy vocabulary to use for...',
