@@ -160,9 +160,10 @@ function rsc_blog_field_instance_config($form_values = NULL) {
   }
   
   /* Blog title field */
+  $fieldname = "{$prefix}_blogtitle";
   
   // user:
-  if (!in_array($fieldname, $instances) && in_array($fieldname, $fields)) {
+  if (!in_array($fieldname, $instances_user) && in_array($fieldname, $fields)) {
     field_create_instance(array(
       'field_name'  => $fieldname,
       'entity_type' => 'user',
